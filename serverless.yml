@@ -1,0 +1,156 @@
+service: api-service-v2
+provider:
+  name: aws
+  region: eu-central-1
+  runtime: provided.al2
+  stackTags:
+    version: ''
+
+plugins:
+  - ./vendor/bref/bref
+
+# Exclude files from deployment
+package:
+  exclude:
+    - 'node_modules/**'
+    - 'tests/**'
+
+functions:
+  api:
+    name: api-service-v2
+    environment:
+      APP_ENV: 'prod'
+      APP_SECRET: '${ssm:/api-service/prod/app_secret~true}'
+      JWT_TOKEN_TTL: '86400'
+      REFRESH_TOKEN_TTL: '2678400'
+      DATABASE_URL: '${ssm:/api-service/prod/database_url~true}'
+      KMS_KEY_ID: '${ssm:/api-service/prod/kms_key_id}'
+      AWS_KEY: '${ssm:/api-service/prod/aws_key~true}'
+      AWS_SECRET: '${ssm:/api-service/prod/aws_secret~true}'
+      AWS_SQS_DSN_MONITORING: '${ssm:/monitoring-service/prod/sqs_monitoring}'
+      AWS_CLOUDWATCH_GROUP: 'api-service-v2'
+      AWS_CLOUDWATCH_KEY: 'key'
+      AWS_CLOUDWATCH_SECRET: 'secret'
+      AWS_CLOUDWATCH_STREAM: 'stream-1'
+      WEB_SERVICE: '${ssm:/api-service/prod/web_service}'
+      SDK_PRE_SHARED_KEY_ACS: '${ssm:/api-service/prod/sdk-authentication-pre-shared-key-acs~true}'
+      SDK_AUTHENTICATION_URL_ACS: '${ssm:/api-service/prod/sdk-authentication-url-acs}'
+      SDK_AUTHENTICATION_URL_EAZY: '${ssm:/api-service/prod/sdk-authentication-url-eazy}'
+      SDK_PRE_SHARED_KEY_EAZY: '${ssm:/api-service/prod/sdk-authentication-pre-shared-key-eazy~true}'
+      SDK_AUTHENTICATION_URL_WELLET: '${ssm:/api-service/prod/sdk_authentication_url_wellet}'
+      SDK_PRE_SHARED_KEY_WELLET: '${ssm:/api-service/prod/sdk_pre_shared_key_wellet~true}'
+      ACCOUNT_SERVICE: '${ssm:/services/prod/account_service}'
+      TRANSACTION_SERVICE: '${ssm:/services/prod/transaction_service}'
+      TERMINAL_SERVICE: '${ssm:/services/prod/terminal_service}'
+      SECURITY_SERVICE: '${ssm:/services/prod/security_service}'
+      RECEIPT_SERVICE: '${ssm:/services/prod/receipt_service}'
+      NOTIFICATION_SERVICE: '${ssm:/services/prod/notification_service}'
+      ATTESTATION_SERVICE: '${ssm:/services/prod/attestation_service}'
+      REDIS_DSN: 'redis://10.0.1.15'
+      MESSENGER_TRANSPORT_DSN: '${ssm:/services/prod/messenger_transport_dsn}'
+      INTERNAL_API_PASSWORD: 'Gs8vFiu4eLOm1NSZEo5Iz6DRPg2lXClv8RjmUWBV'
+      ELASTICSEARCH_HOST: '${ssm:/services/prod/elasticsearch_host}'
+      ELASTICSEARCH_PORT: '${ssm:/services/prod/elasticsearch_port}'
+      ELASTICSEARCH_TRANSPORT: '${ssm:/services/prod/elasticsearch_transport}'
+      ELASTICSEARCH_USER: '${ssm:/services/prod/elasticsearch_username}'
+      ELASTICSEARCH_PASSWORD: '${ssm:/services/prod/elasticsearch_password}'
+      MAILER_HOST: '${ssm:/services/prod/mailer_host}'
+      MAILER_USER: '${ssm:/services/prod/mailer_user}'
+      MAILER_PASSWORD: '${ssm:/services/prod/mailer_password}'
+      MAILER_AUTH_MODE: 'login'
+      SDK_AUTHENTICATION_URL_GIVESTAR: '${ssm:/api-service/prod/sdk-authentication-url-givestar}'
+      SDK_PRE_SHARED_KEY_GIVESTAR: '${ssm:/api-service/prod/sdk-authentication-pre-shared-key-givestar~true}'
+      ENABLE_LOGGER: '${ssm:/api-service/prod/enable_logger}'
+      ENABLE_AUDIT_LOGGER: '${ssm:/api-service/prod/enable_audit_logger}'
+      ENCRYPTION: '${ssm:/api-service/prod/encryption}'
+      SDK_PRE_SHARED_KEY_AZUL: '${ssm:/api-service/prod/sdk_pre_shared_key_azul~true}'
+      SDK_AUTHENTICATION_URL_AZUL: '${ssm:/api-service/prod/sdk-authentication-url-azul}'
+      SDK_PRE_SHARED_KEY_LEMONPAY: '${ssm:/api-service/prod/sdk_pre_shared_key_lemonpay~true}'
+      SDK_AUTHENTICATION_URL_LEMONPAY: '${ssm:/api-service/prod/sdk-authentication-url-lemonpay}'
+      SDK_PRE_SHARED_KEY_MAXAA: '${ssm:/api-service/prod/sdk_pre_shared_key_maxaa~true}'
+      SDK_AUTHENTICATION_URL_MAXAA: '${ssm:/api-service/prod/sdk-authentication-url-maxaa}'
+      NUAPAY_SERVICE: '${ssm:/services/prod/nuapay_service}'
+      POCKYT_SERVICE: '${ssm:/services/prod/pockyt_service}'
+    handler: public/index.php
+    description: 'API for PHOS'
+    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+    layers:
+      - ${bref:layer.php-74-fpm}
+    events:
+      - alb:
+          listenerArn: '${ssm:/api-service/prod/alb}'
+          priority: 1
+          multiValueHeaders: true
+          conditions:
+            path: /
+      - schedule:
+          rate: rate(5 minutes)
+          input:
+            warmer: true
+    vpc:
+      securityGroupIds:
+        - '${ssm:/api-service/prod/sg}'
+      subnetIds:
+        - '${ssm:/api-service/prod/subnet_1}'
+        - '${ssm:/api-service/prod/subnet_2}'
+  console:
+    name: api-service-v2-console
+    environment:
+      APP_ENV: 'prod'
+      APP_SECRET: '${ssm:/api-service/prod/app_secret~true}'
+      JWT_TOKEN_TTL: '86400'
+      REFRESH_TOKEN_TTL: '2678400'
+      DATABASE_URL: '${ssm:/api-service/prod/database_url~true}'
+      AWS_KEY: '${ssm:/api-service/prod/aws_key~true~true}'
+      AWS_SECRET: '${ssm:/api-service/prod/aws_secret~true}'
+      KMS_KEY_ID: '${ssm:/api-service/prod/kms_key_id}'
+      AWS_SQS_DSN_MONITORING: '${ssm:/monitoring-service/prod/sqs_monitoring}'
+      AWS_CLOUDWATCH_GROUP: 'api-service-v2'
+      AWS_CLOUDWATCH_KEY: 'key'
+      AWS_CLOUDWATCH_SECRET: 'secret'
+      AWS_CLOUDWATCH_STREAM: 'stream-1'
+      WEB_SERVICE: '${ssm:/api-service/prod/web_service}'
+      SDK_PRE_SHARED_KEY_ACS: '${ssm:/api-service/prod/sdk-authentication-url-acs}'
+      SDK_AUTHENTICATION_URL_ACS: '${ssm:/api-service/prod/sdk-authentication-pre-shared-key-acs~true}'
+      SDK_AUTHENTICATION_URL_EAZY: '${ssm:/api-service/prod/sdk-authentication-url-eazy}'
+      SDK_PRE_SHARED_KEY_EAZY: '${ssm:/api-service/prod/sdk-authentication-pre-shared-key-eazy~true}'
+      SDK_AUTHENTICATION_URL_WELLET: '${ssm:/api-service/prod/sdk_authentication_url_wellet}'
+      SDK_PRE_SHARED_KEY_WELLET: '${ssm:/api-service/prod/sdk_pre_shared_key_wellet~true}'
+      ACCOUNT_SERVICE: '${ssm:/services/prod/account_service}'
+      TRANSACTION_SERVICE: '${ssm:/services/prod/transaction_service}'
+      TERMINAL_SERVICE: '${ssm:/services/prod/terminal_service}'
+      SECURITY_SERVICE: '${ssm:/services/prod/security_service}'
+      RECEIPT_SERVICE: '${ssm:/services/prod/receipt_service}'
+      NOTIFICATION_SERVICE: '${ssm:/services/prod/notification_service}'
+      ATTESTATION_SERVICE: '${ssm:/services/prod/attestation_service}'
+      REDIS_DSN: 'redis://10.0.1.15'
+      MESSENGER_TRANSPORT_DSN: '${ssm:/services/prod/messenger_transport_dsn}'
+      INTERNAL_API_PASSWORD: 'Gs8vFiu4eLOm1NSZEo5Iz6DRPg2lXClv8RjmUWBV'
+      ELASTICSEARCH_HOST: '${ssm:/services/prod/elasticsearch_host}'
+      ELASTICSEARCH_PORT: '${ssm:/services/prod/elasticsearch_port}'
+      ELASTICSEARCH_TRANSPORT: '${ssm:/services/prod/elasticsearch_transport}'
+      ELASTICSEARCH_USER: '${ssm:/services/prod/elasticsearch_username}'
+      ELASTICSEARCH_PASSWORD: '${ssm:/services/prod/elasticsearch_password}'
+      MAILER_HOST: '${ssm:/services/prod/mailer_host}'
+      MAILER_USER: '${ssm:/services/prod/mailer_user}'
+      MAILER_PASSWORD: '${ssm:/services/prod/mailer_password}'
+      MAILER_AUTH_MODE: 'login'
+      ENABLE_LOGGER: '${ssm:/api-service/prod/enable_logger}'
+      ENABLE_AUDIT_LOGGER: '${ssm:/api-service/prod/enable_audit_logger}'
+      ENCRYPTION: '${ssm:/api-service/prod/encryption}'
+    handler: bin/console
+    description: 'Notification for PHOS Console'
+    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+    layers:
+      - ${bref:layer.php-74-fpm}
+      - ${bref:layer.console}
+    vpc:
+      securityGroupIds:
+        - '${ssm:/api-service/prod/sg}'
+      subnetIds:
+        - '${ssm:/api-service/prod/subnet_1}'
+        - '${ssm:/api-service/prod/subnet_2}'
+    events:
+      - schedule:
+          rate: rate(2 minutes)
+          input: '"messenger:consume notification_aws_sqs --time-limit=20"'
