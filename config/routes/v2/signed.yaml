@@ -1,0 +1,6 @@
+api_v2_sdk_client_authentication:
+  path: /v2/sdk-client-authentication
+  methods: POST
+  controller: App\Controller\V2\Security\SDKController::authenticate
+  defaults:
+    useApkKey: true

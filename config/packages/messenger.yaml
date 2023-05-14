@@ -1,0 +1,6 @@
+framework:
+    messenger:
+        transports:
+            monitoring_aws_sqs: "%env(resolve:AWS_SQS_DSN_MONITORING)%"
+        routing:
+            'App\Message\MonitoringAuditMessage': monitoring_aws_sqs

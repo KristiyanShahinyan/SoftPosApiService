@@ -1,0 +1,8 @@
+parameters:
+  pending_reversals:
+    "1602160033":
+      should_clear_reversals: true
+    "azul-integration":
+      should_clear_reversals: true
+    "default":
+      should_clear_reversals: false

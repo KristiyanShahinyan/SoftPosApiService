@@ -1,0 +1,55 @@
+signed:
+    resource: routes/*/signed.yaml
+    defaults:
+        signed: true
+
+skip_device_id_routes:
+    resource: routes/*/skip_device_id.yaml
+    defaults:
+        skip_device_id: true
+
+encrypted_routes:
+    resource: routes/*/encrypted.yaml
+    defaults:
+        encrypted: true
+
+api_v1_init:
+    path: /v1/init/{name}
+    methods: GET
+    controller: App\Controller\V1\InitController::init
+    defaults:
+        signed: true
+        useApkKey: true
+
+api_v1_combined:
+    path: /v1/combined/{name}/{bytes?32}
+    methods: GET
+    controller: App\Controller\V1\InitController::combined
+    defaults:
+        signed: true
+        useApkKey: true
+
+api_current_time:
+    path: /v1/current-time
+    methods: GET
+    controller: App\Controller\V1\InitController::currentTime
+    defaults:
+        signed: true
+        useApkKey: true
+
+api_pin_init:
+    path: /v1/pin/init
+    methods: POST
+    controller: App\Controller\V1\InitController::pinInitialization
+    defaults:
+        signed: true
+        useApkKey: true
+
+deeplink:
+    path: /.well-known/assetlinks.json
+    controller: App\Controller\DeeplinkController:assetsLink
+
+api_v1_ssl_pinning:
+    path: /v1/ssl-pinning
+    methods: POST
+    controller: App\Controller\V1\PingController::sslPinning

@@ -1,0 +1,87 @@
+api_v2_attestation_set_pinpad_key:
+  path: /v2/attestation/set_pinpad_key
+  methods: POST
+  controller: App\Controller\V2\Security\AttestationController::setPinpadKey
+
+api_v2_attestation_details:
+  path: /v2/attestation/details
+  methods: POST
+  controller: App\Controller\V2\Security\AttestationController::details
+
+api_v2_safetynet_verify:
+  path: /v2/safetynet/verify
+  methods: POST
+  controller: App\Controller\V2\Security\AttestationController::safetynetVerify
+
+api_v2_user_change_password:
+  path: /v2/user/change-password
+  methods: POST
+  controller: App\Controller\V2\Account\UserController::changePassword
+
+api_v2_user_forgot_password:
+  path: /v2/user/forgotten-password
+  methods: POST
+  controller: App\Controller\V2\Account\UserController::forgotPassword
+
+api_v2_access_request:
+  path: /v2/access-request
+  methods: POST
+  controller: App\Controller\V2\Account\AccessRequestController::create
+
+api_v2_loyal_apps:
+  path: /v2/loyal_apps
+  methods: GET
+  controller: App\Controller\V2\Account\UserController::loadLoyalApps
+
+# Terminal Routes
+api_v2_terminal_config:
+  path: /v2/configuration/{token}
+  methods: GET
+  controller: App\Controller\V2\Terminal\ConfigurationController::show
+
+# Transaction Routes
+api_v2_transactions_v3:
+  path: /v3/transactions
+  methods: POST
+  controller: App\Controller\V2\Transaction\TransactionController::index
+
+# Sales Routes
+api_v2_sales_total:
+  path: /v2/sales/total
+  methods: POST
+  controller: App\Controller\V2\Transaction\AnalyticsController::getSalesTotal
+
+api_v2_analytics:
+  path: /v2/analytics
+  methods: POST
+  controller: App\Controller\V2\Transaction\AnalyticsController::getAnalyticsData
+
+# Receipt Routes
+api_v2_receipt_send:
+  path: /v2/receipt/send
+  methods: POST
+  controller: App\Controller\V2\Notification\ReceiptController::send
+
+api_v2_receipt_generate:
+  path: /v2/receipt/generate
+  methods: POST
+  controller: App\Controller\V2\Notification\ReceiptController::generate
+
+# Login
+api_v2_login_check:
+  path: /v2/login
+  methods: POST
+
+
+# Refresh token
+gesdinet_jwt_refresh_token_v2:
+  path: /v2/token/refresh
+  methods: POST
+  defaults:
+    _controller: gesdinet.jwtrefreshtoken:refresh
+
+# Ping to check if session is still active
+api_v2_ping:
+  path: /v2/ping
+  methods: GET
+  controller: App\Controller\V2\PingController::ping

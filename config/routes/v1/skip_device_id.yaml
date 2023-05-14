@@ -1,0 +1,40 @@
+link_password_reset:
+  path: /link/{token}
+  methods: GET
+  controller: App\Controller\V1\UserController::resetPasswordForm
+  requirements:
+    token: '^[a-z0-9]*[a-z]+[a-z0-9]*$'
+  defaults:
+    signed: true
+
+api_user_reset_v1_password:
+  path: /v1/user/reset_password
+  methods: POST
+  controller: App\Controller\V1\UserController::resetPassword
+  defaults:
+    signed: true
+
+api_app_update_index:
+  path: /internal/app-update/list/{page?1}/{limit?20}
+  methods: GET
+  controller: App\Controller\V1\AppUpdateController::index
+
+api_app_update_create:
+  path: /internal/app-update
+  methods: POST
+  controller: App\Controller\V1\AppUpdateController::create
+
+api_app_update_show:
+  path: /internal/app-update/{id}
+  methods: GET
+  controller: App\Controller\V1\AppUpdateController::show
+
+api_app_update_edit:
+  path: /internal/app-update/{id}
+  methods: PUT
+  controller: App\Controller\V1\AppUpdateController::update
+
+api_app_update_delete:
+  path: /internal/app-update/{id}
+  methods: DELETE
+  controller: App\Controller\V1\AppUpdateController::delete

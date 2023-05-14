@@ -1,0 +1,9 @@
+lexik_jwt_authentication:
+    secret_key: 'kms'
+    public_key: 'kms'
+    pass_phrase: 'kms'
+    token_ttl: '%env(resolve:JWT_TOKEN_TTL)%'
+    user_id_claim: username
+    user_identity_field: token
+    encoder:
+        service: app.aws_encoder

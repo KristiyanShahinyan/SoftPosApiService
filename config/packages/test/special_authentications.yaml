@@ -1,0 +1,3 @@
+parameters:
+  special_authentications:
+    "tester": 1

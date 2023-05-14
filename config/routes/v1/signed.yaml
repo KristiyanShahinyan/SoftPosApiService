@@ -1,0 +1,66 @@
+api_v2_attestation_init:
+  path: /v2/attestation/init
+  methods: GET
+  controller: App\Controller\V2\Security\AttestationController::init
+  defaults:
+    useApkKey: true
+
+api_v2_attestation_verify:
+  path: /v2/attestation/verify
+  methods: POST
+  controller: App\Controller\V2\Security\AttestationController::verify
+  defaults:
+    useApkKey: true
+
+api_v1_random:
+  path: /v1/random/{bytes?32}
+  methods: GET
+  controller: App\Controller\V1\RandomController::random
+  defaults:
+    useApkKey: true
+
+api_v1_attestation_verify:
+  path: /v1/attestation/verify
+  methods: [POST,GET]
+  controller: App\Controller\V1\AttestationController::verify
+  defaults:
+    useApkKey: true
+
+api_v1_get_nonce:
+  path: /v1/nonce
+  methods: GET
+  controller: App\Controller\V1\AttestationController::getNonce
+
+api_v1_attestation_init:
+  path: /v1/attestation/init
+  methods: [GET,POST]
+  controller: App\Controller\V1\AttestationController::init
+  defaults:
+    useApkKey: true
+
+api_v1_renew_shared_key:
+  path: /v1/renew-key
+  methods: GET
+  controller: App\Controller\V1\SharedKeyController::renewKey
+  defaults:
+    useApkKey: true
+
+api_v1_renew_session_init:
+  path: /v1/session-init
+  methods: [GET,POST]
+  controller: App\Controller\V1\SharedKeyController::sessionInit
+  defaults:
+    useApkKey: true
+api_v1_renew_session_ping:
+  path: /v1/session-ping
+  methods: [GET,POST]
+  controller: App\Controller\V1\SharedKeyController::sessionPing
+  defaults:
+    useApkKey: true
+
+api_v1_sdk_client_authentication:
+  path: /v1/sdk-client-authentication
+  methods: POST
+  controller: App\Controller\V1\SDKController::authenticate
+  defaults:
+    useApkKey: true

@@ -1,0 +1,142 @@
+api_v1_attestation_set_pinpad_key:
+  path: /v1/attestation/set_pinpad_key
+  methods: POST
+  controller: App\Controller\V1\AttestationController::setPinpadKey
+
+api_v1_attestation_details:
+  path: /v1/attestation/details
+  methods: POST
+  controller: App\Controller\V1\AttestationController::details
+
+api_v1_safetynet_verify:
+  path: /v1/safetynet/verify
+  methods: POST
+  controller: App\Controller\V1\AttestationController::safetynetVerify
+
+api_v1_user_change_password:
+  path: /v1/user/change_password
+  methods: POST
+  controller: App\Controller\V1\UserController::changePassword
+
+api_v1_user_forgot_password:
+  path: /v1/user/forgot_password
+  methods: POST
+  controller: App\Controller\V1\UserController::forgotPassword
+
+api_v1_merchant_details:
+  path: /v1/merchant
+  methods: GET
+  controller: App\Controller\V1\MerchantController::show
+
+api_v1_loyal_apps:
+  path: /v1/loyal_apps
+  methods: GET
+  controller: App\Controller\V1\UserController::loadLoyalApps
+
+
+# Terminal Routes
+api_v1_terminal_config:
+  path: /v1/terminal/config
+  methods: GET
+  controller: App\Controller\V1\TerminalController::terminalConfig
+
+# Transaction Routes
+api_v1_transactions_index_v2:
+  path: /v2/transactions
+  methods: POST
+  controller: App\Controller\V1\TransactionController::index
+
+api_v1_transactions_show_v2:
+  path: /v2/transactions/{token}
+  methods: GET
+  controller: App\Controller\V1\TransactionController::show
+
+# Sales Routes
+api_v1_sales_total:
+  path: /v1/sales/total
+  methods: POST
+  controller: App\Controller\V1\AnalyticsController::getSalesTotal
+
+api_v1_analytics:
+  path: /v1/analytics
+  methods: POST
+  controller: App\Controller\V1\AnalyticsController::getAnalyticsData
+
+
+# Receipt Routes
+api_v1_receipt_send:
+  path: /v1/receipt/send
+  methods: POST
+  controller: App\Controller\V1\ReceiptController::send
+
+api_v1_receipt_generate:
+  path: /v1/receipt/generate
+  methods: POST
+  controller: App\Controller\V1\ReceiptController::generate
+
+# Login
+api_v1_login_check:
+  path: /v1/login
+  methods: POST
+
+
+# Refresh token
+gesdinet_jwt_refresh_token_v1:
+  path: /v1/token/refresh
+  methods: POST
+  defaults:
+    _controller: gesdinet.jwtrefreshtoken:refresh
+
+# Ping to check if session is still active
+api_v1_ping:
+  path: /v1/ping
+  methods: GET
+  controller: App\Controller\V1\PingController::ping
+
+api_v1_audit_external:
+  path: /v1/log/audit
+  methods: POST
+  controller: App\Controller\V1\AuditController::log
+
+api_v1_audit_bulk_external:
+  path: /v1/log/audit-bulk
+  methods: POST
+  controller: App\Controller\V1\AuditController::logBulk
+
+api_v1_instance_token:
+  path: /v1/instance/token/{alias}
+  methods: GET
+  controller: App\Controller\V1\InitController::getInstanceToken
+
+api_v1_transaction_sale:
+  path: /v1/operation/sale
+  methods: POST
+  controller: App\Controller\V1\TransactionController::sale
+
+api_v1_transaction_sale_external:
+  path: /v1/operation/sale/{partner}
+  methods: POST
+  controller: App\Controller\V1\TransactionController::saleExternal
+  requirements:
+    partner: nuapay|pockyt
+
+api_v1_transaction_refund:
+  path: /v1/operation/refund
+  methods: POST
+  controller: App\Controller\V1\TransactionController::refund
+
+api_v1_transaction_refund_external:
+  path: /v1/operation/refund/{partner}
+  methods: POST
+  controller: App\Controller\V1\TransactionController::refundExternal
+  requirements:
+    partner: nuapay|pockyt
+
+api_v1_transaction_void:
+  path: /v1/operation/void/{partner}
+  methods: POST
+  controller: App\Controller\V1\TransactionController::void
+  requirements:
+    partner: phos|pockyt
+  defaults:
+    partner: phos

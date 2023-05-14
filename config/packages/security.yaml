@@ -1,0 +1,43 @@
+security:
+  enable_authenticator_manager: true
+  encoders:
+    App\Security\User: auto
+
+  providers:
+    # used to reload user from session & other features (e.g. switch_user)
+    app_user_provider:
+      id: App\Security\UserProvider
+    jwt:
+      lexik_jwt:
+        class: App\Security\User
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    login_v1:
+      pattern: ^/v1/login$
+      stateless: true
+      provider: app_user_provider
+      custom_authenticators:
+        - App\Security\TokenAuthenticator
+    login_v2:
+      pattern: ^/v2/login$
+      stateless: true
+      provider: app_user_provider
+      guard:
+        authenticators:
+          - App\Security\TokenAuthenticatorV2
+    admin:
+      pattern: ^/internal/
+      stateless: true
+      provider: app_user_provider
+      guard:
+        authenticators:
+          - App\Security\KeyAuthenticator
+    main:
+      user_checker: security.user_checker
+      stateless: true
+      jwt: ~
+      provider: app_user_provider
+

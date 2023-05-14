@@ -1,0 +1,43 @@
+monolog:
+  channels: ['communication_log','device_audit_log']
+  handlers:
+    main:
+      type: fingers_crossed
+      action_level: error
+      handler: nested
+      excluded_404s:
+        # regex: exclude all 404 errors from the logs
+        - ^/
+    cloud_watch:
+      type: stream
+      path: "php://stderr"
+      formatter: monolog.formatter.custom_logstash
+    elasticsearch:
+      type: elasticsearch
+      ignore_error: true
+      elasticsearch:
+        host: '%env(resolve:ELASTICSEARCH_HOST)%'
+        port: '%env(resolve:ELASTICSEARCH_PORT)%'
+        transport: '%env(resolve:ELASTICSEARCH_TRANSPORT)%'
+        user: 'a'
+        password: 'a'
+      index: 'communication_log'
+      channels: ['communication_log']
+    nested:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+      formatter: monolog.formatter.custom_logstash
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine"]
+      formatter: monolog.formatter.custom_logstash
+    deprecation:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+    deprecation_filter:
+      type: filter
+      handler: deprecation
+      max_level: info
+      channels: ["php"]
